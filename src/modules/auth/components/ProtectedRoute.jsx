@@ -6,6 +6,8 @@ const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuthContext();
   const location = useLocation();
 
+  console.log('ProtectedRoute: auth state', { user, loading, path: location.pathname });
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -15,9 +17,11 @@ const ProtectedRoute = ({ children }) => {
   }
 
   if (!user) {
+    console.log('No user, redirecting to login');
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
+  console.log('User authenticated, rendering protected content');
   return children;
 };
 
