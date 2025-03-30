@@ -3,9 +3,14 @@ import * as Sentry from '@sentry/browser';
 
 console.log('Initializing supabase client with app ID:', import.meta.env.VITE_PUBLIC_APP_ID);
 
+// Declare variables at the top level
+let supabase;
+let recordLogin;
+
 try {
-  const { supabase, recordLogin } = initializeZapt(import.meta.env.VITE_PUBLIC_APP_ID);
-  export { supabase, recordLogin };
+  const zapt = initializeZapt(import.meta.env.VITE_PUBLIC_APP_ID);
+  supabase = zapt.supabase;
+  recordLogin = zapt.recordLogin;
 } catch (error) {
   console.error('Failed to initialize ZAPT/Supabase:', error);
   Sentry.captureException(error);
@@ -14,7 +19,7 @@ try {
     console.error('Using mock recordLogin because initialization failed');
   };
   // Export a dummy client that will show a clear error
-  export const supabase = {
+  supabase = {
     auth: {
       getSession: async () => {
         const error = new Error('Supabase client failed to initialize');
@@ -37,5 +42,8 @@ try {
       }
     }
   };
-  export const recordLogin = mockRecordLogin;
+  recordLogin = mockRecordLogin;
 }
+
+// Export at the top level
+export { supabase, recordLogin };
