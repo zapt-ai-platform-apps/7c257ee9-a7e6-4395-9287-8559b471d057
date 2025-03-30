@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { supabase } from '@/supabaseClient';
@@ -10,10 +10,15 @@ const Login = () => {
   const { user, loading } = useAuthContext();
   const navigate = useNavigate();
   const location = useLocation();
+  const [authError, setAuthError] = useState(null);
   const from = location.state?.from?.pathname || '/dashboard';
   
   useEffect(() => {
-    console.log('Login component: user state changed', { user, loading });
+    console.log('Login component: user state changed', { 
+      user: user ? 'exists' : 'null', 
+      loading, 
+      from 
+    });
     
     if (user && !loading) {
       console.log('User is authenticated, navigating to:', from);
@@ -34,7 +39,7 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
       <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
         <div className="mb-6 text-center">
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Mechanic Job Sheet App</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">Mechanic Job Sheets</h2>
           <p className="text-gray-600">Sign in with ZAPT</p>
           <div className="mt-2">
             <a 
@@ -47,6 +52,12 @@ const Login = () => {
             </a>
           </div>
         </div>
+        
+        {authError && (
+          <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">
+            Authentication error: {authError}
+          </div>
+        )}
         
         <Auth
           supabaseClient={supabase}
@@ -67,6 +78,7 @@ const Login = () => {
           view="magic_link"
           onError={(error) => {
             console.error('Auth error:', error);
+            setAuthError(error.message);
             Sentry.captureException(error);
           }}
         />

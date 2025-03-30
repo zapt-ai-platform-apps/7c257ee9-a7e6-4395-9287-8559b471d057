@@ -9,8 +9,31 @@ let recordLogin;
 
 try {
   const zapt = initializeZapt(import.meta.env.VITE_PUBLIC_APP_ID);
+  if (!zapt) {
+    throw new Error('Failed to initialize ZAPT - initializeZapt returned empty value');
+  }
+  
   supabase = zapt.supabase;
   recordLogin = zapt.recordLogin;
+  
+  if (!supabase) {
+    throw new Error('Supabase client not available from ZAPT initialization');
+  }
+  
+  // Test the supabase connection to catch any early issues
+  supabase.auth.getSession()
+    .then(({ data, error }) => {
+      if (error) {
+        console.error('Supabase session test failed:', error);
+        Sentry.captureException(error);
+      } else {
+        console.log('Supabase connection verified:', data.session ? 'User has session' : 'No session');
+      }
+    })
+    .catch((error) => {
+      console.error('Unexpected error testing Supabase connection:', error);
+      Sentry.captureException(error);
+    });
 } catch (error) {
   console.error('Failed to initialize ZAPT/Supabase:', error);
   Sentry.captureException(error);

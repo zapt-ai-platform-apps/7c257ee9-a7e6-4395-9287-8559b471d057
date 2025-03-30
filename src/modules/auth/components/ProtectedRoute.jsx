@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuthContext } from './AuthProvider';
 
@@ -6,7 +6,13 @@ const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuthContext();
   const location = useLocation();
 
-  console.log('ProtectedRoute: auth state', { user, loading, path: location.pathname });
+  useEffect(() => {
+    console.log('ProtectedRoute: auth state changed', { 
+      user: user ? 'exists' : 'null', 
+      loading, 
+      path: location.pathname 
+    });
+  }, [user, loading, location.pathname]);
 
   if (loading) {
     return (
@@ -17,11 +23,11 @@ const ProtectedRoute = ({ children }) => {
   }
 
   if (!user) {
-    console.log('No user, redirecting to login');
+    console.log('No user, redirecting to login from', location.pathname);
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  console.log('User authenticated, rendering protected content');
+  console.log('User authenticated, rendering protected content at', location.pathname);
   return children;
 };
 

@@ -1,7 +1,7 @@
 {
-  "name": "mechanic-job-sheet-app",
+  "name": "mechanic-job-sheets",
   "version": "1.0.0",
-  "description": "Mechanic Job Sheet & Invoice Generator App",
+  "description": "Mechanic Job Sheets & Invoice Generator App",
   "type": "module",
   "scripts": {
     "dev": "vite",

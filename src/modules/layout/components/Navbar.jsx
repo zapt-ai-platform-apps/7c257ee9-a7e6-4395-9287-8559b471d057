@@ -31,7 +31,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="flex-shrink-0 font-bold text-xl">
-              Mechanic Job Sheet
+              Mechanic Job Sheets
             </Link>
             
             {/* Desktop menu */}

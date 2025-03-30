@@ -12,7 +12,7 @@ const Layout = () => {
       <footer className="bg-gray-200 py-4">
         <div className="container mx-auto px-4 flex justify-between items-center">
           <p className="text-sm text-gray-600">
-            © {new Date().getFullYear()} Mechanic Job Sheet App
+            © {new Date().getFullYear()} Mechanic Job Sheets
           </p>
         </div>
       </footer>
